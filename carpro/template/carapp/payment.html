@@ -1,0 +1,70 @@
+{% extends 'carapp/layout/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static 'images/bg_7.jpg' %}');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+        <div class="col-md-9 ftco-animate pb-5">
+            <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Payment <i class="ion-ios-arrow-forward"></i></span></p>
+          <h1 class="mb-3 bread">Payment</h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ftco-section contact-section">
+    <div class="container">
+      
+        <div class="col-md-8 block-9 mb-md-5">
+            <form id="payment-form" method="POST" action="/carapp/payment/">
+                {% csrf_token %}
+                <input type="hidden" id="razorpay_order_id" name="razorpay_order_id" value="{{ order_id }}">
+                <input type="hidden" id="razorpay_key_id" name="razorpay_key_id" value="{{ razorpay_key_id }}">
+                <input type="hidden" id="amount" name="amount" value="{{ amount }}">
+                
+                <!-- Debugging information -->
+                <p>Order ID: {{ order_id }}</p>
+                <p>Razorpay Key ID: {{ razorpay_key_id }}</p>
+                <p>Amount: {{ amount }}</p>
+        
+                <button id="pay-button">Pay Now</button>
+            </form>
+        
+            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+            <script>
+                document.getElementById('pay-button').onclick = function(e) {
+                    e.preventDefault();
+                    var options = {
+                        "key": document.getElementById('razorpay_key_id').value,
+                        "amount": document.getElementById('amount').value,
+                        "currency": "INR",
+                        "name": "Car Rental",
+                        "order_id": document.getElementById('razorpay_order_id').value,
+                        "handler": function(response) {
+                            var form = document.getElementById('payment-form');
+                            form.appendChild(createInputElement('razorpay_payment_id', response.razorpay_payment_id));
+                            form.appendChild(createInputElement('razorpay_signature', response.razorpay_signature));
+                            form.submit();
+                        }
+                    };
+                    var rzp1 = new Razorpay(options);
+                    rzp1.open();
+                };
+        
+                function createInputElement(name, value) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    return input;
+                }
+            </script>
+        </div>
+    </div>
+  </section>
+    
+{% endblock %}

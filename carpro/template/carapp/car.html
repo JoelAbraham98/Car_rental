@@ -1,0 +1,70 @@
+{% extends 'carapp/layout/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static 'images/bg_4.jpg' %}');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs">
+                    <span class="mr-2"><a href="{% url 'index' %}">Home <i class="ion-ios-arrow-forward"></i></a></span>
+                    <span>Cars <i class="ion-ios-arrow-forward"></i></span>
+                </p>
+                <h1 class="mb-3 bread">Choose Your Car</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="center" class="center_home">
+    <div class="container">
+        <div class="row">
+            {% if datas %}
+                {% for car in datas|slice:":12" %}
+                    {% if car.image %}
+                        <div class="col-md-4 mb-4" id="car-{{ forloop.counter0 }}">
+                            <div class="car-wrap rounded ftco-animate shadow-sm">
+                                <div class="img rounded d-flex align-items-end" style="background-image: url('{{ car.image.url }}'); height: 300px; background-size: cover; background-position: center; cursor: pointer; width: 300px;"></div>
+                                <div class="text p-4">
+                                    <h2 class="mb-0"><a href="{% url 'car_single' car.id %}">{{ car.model }}</a></h2>
+                                    <div class="d-flex mb-3">
+                                        <span class="cat">{{ car.make }}</span>
+                                        <p class="price ml-auto">{{ car.daily_rental_rate }} <span>/day</span></p>
+                                    </div>
+                                    <p class="d-flex mb-0 d-block">
+                                        {% if user.is_authenticated %}
+                                        <a href="{% url 'book_now' car.id %}" class="btn btn-primary py-2 mr-1">Book now</a>
+                                    {% else %}
+                                        <a href="{% url 'login_page' %}?next={% url 'book_now' car.id %}" class="btn btn-primary py-2 mr-1">Book now</a>
+                                    {% endif %}
+                                    <a href="{% url 'car_single' car.id %}" class="btn btn-secondary py-2 ml-1">Details</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<script>
+    document.querySelectorAll('.img').forEach(function(img) {
+        img.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.1)';
+        });
+        img.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+</script>
+
+<style>
+    .img {
+        transition: transform 0.3s ease;
+    }
+</style>
+
+{% endblock %}

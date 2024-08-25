@@ -1,0 +1,108 @@
+{% extends 'carapp/layout/base.html' %}
+{% load static %}
+{% block content %}
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static 'images/bg_10.jpg' %}');" data-stellar-background-ratio="0.5">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+      <div class="col-md-9 ftco-animate pb-5">
+        <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'index' %}">Home <i class="ion-ios-arrow-forward"></i></a></span></p>
+        <h1 class="mb-3 bread">Book {{ car.name }}</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+    .container-booking {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .container-booking h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .container-booking form {
+        width: 100%;
+    }
+    .container-booking form p {
+        margin: 10px 0;
+    }
+    .btn-custom {
+        display: block;
+        width: 100%;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 15px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .btn-custom:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="container-booking">
+    <h1>Book {{ car.make }} {{ car.model }}</h1>
+    <form id="booking-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button id="rzp-button1" class="btn-custom">Pay with Razorpay</button>
+    </form>
+
+    <!-- Hidden form to capture payment details -->
+    <form id="razorpay-response-form" method="post" style="display: none;">
+        {% csrf_token %}
+        <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+        <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+        <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+    </form>
+</div>
+
+<script>
+    var options = {
+        "key": "{{ razorpay_key_id }}",
+        "amount": "{{ amount }}", 
+        "currency": "INR",
+        "name": "Car Rental",
+        "description": "Booking for {{ car.model }}",
+        "order_id": "{{ order_id }}", 
+        "handler": function (response) {
+            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+            document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+            document.getElementById('razorpay_signature').value = response.razorpay_signature;
+            document.getElementById('razorpay-response-form').submit();
+        },
+        "prefill": {
+            "name": "{{ request.user.username }}",
+            "email": "{{ request.user.email }}"
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+
+{% endblock %}

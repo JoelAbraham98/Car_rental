@@ -1,0 +1,92 @@
+{% extends 'carapp/layout/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static 'images/bg_8.jpg' %}');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'index' %}">Home <i class="ion-ios-arrow-forward"></i></a></span></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Success Message Section -->
+<div class="container">
+    <br><br>
+    <div class="alert alert-success" role="alert">
+        <div class="message-content">
+            <h1>Payment Successful</h1>
+            <p>Thank you for your payment. Your booking is confirmed.</p>
+        </div>
+    </div><br>
+</div>
+
+{% endblock %}
+
+<!-- Internal CSS -->
+<style>
+    .hero-wrap {
+        position: relative;
+        color: #fff;
+        padding: 100px 0;
+    }
+
+    .hero-wrap .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border: 1px solid #c3e6cb;
+        border-radius: 4px;
+        color: #155724;
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .alert-success h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #155724;
+    }
+
+    .alert-success p {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .message-content {
+        text-align: center;
+    }
+
+    .breadcrumbs {
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .breadcrumbs a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .breadcrumbs a:hover {
+        text-decoration: underline;
+    }
+
+    .container {
+        padding: 20px;
+    }
+</style>
+
+
+

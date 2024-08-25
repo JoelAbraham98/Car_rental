@@ -1,0 +1,70 @@
+{% extends 'carapp/layout/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{% static 'images/bg_10.jpg' %}');" data-stellar-background-ratio="0.5">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+      <div class="col-md-9 ftco-animate pb-5">
+        <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'index' %}">Home <i class="ion-ios-arrow-forward"></i></a></span></p>
+        <h1 class="mb-3 bread">Signup</h1>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .login-form {
+    margin-left: 25px;
+    margin-top: 20px;
+  }
+  .login-form .btn-group {
+    margin-bottom: 14%;
+  }
+  .login-form .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  .login-form input[type="text"], 
+  .login-form input[type="password"], 
+  .login-form input[type="email"] {
+    font-size: 1.2em;
+    width: 40%;
+    padding: 10px;
+  }
+  .login-form input::placeholder {
+    font-size: 1.2em;
+    width: 40%;
+    letter-spacing: 1px;
+  }
+  .alert {
+    color: red;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+</style>
+
+<div class="login-form">
+  {% if msg %}
+  <div class="alert-success">
+     {{msg}}
+     {% endif %}
+  {% if form.errors %}
+  <div class="alert">
+    Please enter valid details.
+  </div>
+  {% endif %}
+</div>
+  <form action="" method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      {{ form.as_p }}
+    </div>
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <button type="submit" class="btn btn-primary">Login</button>
+    
+  </form>
+</div>
+
+{% endblock %}
